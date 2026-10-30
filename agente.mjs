@@ -48,6 +48,17 @@ const declaraciones = [
       additionalProperties: false,
     },
   },
+  {
+    type: "function",
+    name: "obtener_hora",
+    description: "Devuelve la hora actual en formato HH:MM. Solo consulta, no modifica nada.",
+    strict: true,
+    parameters: {
+      type: "object",
+      properties: {},
+      additionalProperties: false,
+    },
+  }
 ];
 
 if (skills.size > 0) {
@@ -76,6 +87,12 @@ const herramientas = {
     return { ciudad, temperatura_c: temp };
   },
   crear_recordatorio: async ({ texto }) => ({ ok: true, creado: texto }),
+  obtener_hora: async () => {
+    const ahora = new Date();
+    const horas = ahora.getHours().toString().padStart(2, '0');
+    const minutos = ahora.getMinutes().toString().padStart(2, '0');
+    return { hora: `${horas}:${minutos}` };
+  },
   leer_skill: async ({ nombre }) => leerSkill(skills, nombre), // solo lectura
 };
 
@@ -142,8 +159,7 @@ async function agente(pregunta) {
   return "Me detuve: alcancé el máximo de pasos sin terminar.";
 }
 
-const pregunta =
-  "¿Qué temperatura hay en Quito? Si hace menos de 15 grados, créame un recordatorio para llevar abrigo.";
+const pregunta = "¿Qué temperatura hay en Quito? Si hace menos de 15 grados, créame un recordatorio para llevar abrigo.";
 console.log("Pregunta:", pregunta, "\n");
 console.log("\nRespuesta final:", await agente(pregunta));
 rl.close();
